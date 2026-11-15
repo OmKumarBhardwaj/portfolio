@@ -32,15 +32,17 @@ export function Reveal({
 }
 
 /** Section heading with small eyebrow label. */
-export function SectionHeading({ eyebrow, title, className }: { eyebrow: string; title: ReactNode; className?: string }) {
+export function SectionHeading({ eyebrow, title, className }: { eyebrow: string; title?: ReactNode; className?: string }) {
   return (
     <div className={cn("mb-12 md:mb-16", className)}>
       <Reveal>
-        <p className="mb-3 font-mono text-xs uppercase tracking-[0.3em] text-violet-500 dark:text-violet-400">{eyebrow}</p>
+        <p className="mb-3 font-mono text-sm uppercase tracking-[0.3em] text-violet-500 dark:text-violet-400 md:text-base">{eyebrow}</p>
       </Reveal>
-      <Reveal delay={0.1}>
-        <h2 className="text-4xl font-semibold tracking-tight md:text-6xl">{title}</h2>
-      </Reveal>
+      {title && (
+        <Reveal delay={0.1}>
+          <h2 className="text-4xl font-semibold tracking-tight md:text-6xl">{title}</h2>
+        </Reveal>
+      )}
     </div>
   );
 }

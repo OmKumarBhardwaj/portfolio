@@ -21,7 +21,7 @@ const PILLAR_ICONS = {
 export function About() {
   return (
     <section id="about" className="section container-x">
-      <SectionHeading eyebrow="About me" title="Who I am" className="mb-10" />
+      <SectionHeading eyebrow="About me" className="mb-8" />
       <ScrollLitText
         text={DATA.aboutStatement}
         className="max-w-6xl text-3xl font-semibold leading-tight tracking-tight sm:text-4xl md:text-5xl lg:text-6xl"
@@ -68,7 +68,7 @@ export function Experience() {
 
   return (
     <section id="experience" className="section container-x">
-      <SectionHeading eyebrow="Experience" title="Where I've worked" />
+      <SectionHeading eyebrow="Experience" />
       <div ref={ref} className="relative">
         <div className="absolute left-[11px] top-2 bottom-2 w-px bg-border md:left-1/2" />
         <motion.div
@@ -262,7 +262,7 @@ export function Skills() {
   return (
     <section id="skills" className="section">
       <div className="container-x">
-        <SectionHeading eyebrow="Skills" title="My toolkit" />
+        <SectionHeading eyebrow="Skills" />
       </div>
 
       <div className="relative mb-16 space-y-4 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
