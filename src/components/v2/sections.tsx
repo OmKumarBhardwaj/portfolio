@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useScroll, useTransform, type MotionValue } from "motion/react";
-import { ArrowUpRight, Check, Cloud, Copy, Lock, Mail, Server, Sparkles, Terminal } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Check, Download, Cloud, Copy, Lock, Mail, Server, Sparkles, Terminal } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { DATA } from "@/data/resume";
 import { Icons } from "@/components/icons";
@@ -9,6 +9,7 @@ import { CountUp, Reveal, ScrollLitText, SectionHeading, SpotlightCard } from ".
 import { cn } from "@/lib/utils";
 
 const ease = [0.22, 1, 0.36, 1] as const;
+const BP = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
 const PILLAR_ICONS = {
   sparkles: Sparkles,
@@ -170,7 +171,7 @@ function ProjectCard({
   // Stacking cards only on large screens; on phones the cards are taller than the screen.
   const [stack, setStack] = useState(false);
   useEffect(() => {
-    const mq = window.matchMedia("(min-width: 1024px) and (min-height: 700px)");
+    const mq = window.matchMedia("(min-width: 1024px) and (min-height: 760px)");
     const on = () => setStack(mq.matches);
     on();
     mq.addEventListener("change", on);
@@ -190,22 +191,31 @@ function ProjectCard({
         className="origin-top overflow-hidden rounded-[2rem] border border-border bg-card shadow-2xl shadow-black/10"
       >
         <div className="grid lg:grid-cols-2">
-          <div className="flex flex-col p-8 md:p-12">
+          <div className="flex flex-col p-7 md:p-10">
             <div className="flex items-center justify-between">
               <span className="font-mono text-sm text-muted-foreground">0{i + 1} / 0{n}</span>
               <span className="rounded-full border border-border px-3 py-1 text-xs text-muted-foreground">{p.meta}</span>
             </div>
-            <h3 className="mt-8 text-4xl font-semibold tracking-tight md:text-5xl">{p.title}</h3>
-            <p className={cn("mt-2 bg-gradient-to-r bg-clip-text text-xl font-medium text-transparent", p.color)}>{p.subtitle}</p>
-            <p className="mt-6 text-muted-foreground md:text-lg">{p.description}</p>
-            <div className="mt-8 flex flex-wrap gap-2">
+            <h3 className="mt-6 text-4xl font-semibold tracking-tight md:text-5xl">{p.title}</h3>
+            <p className={cn("mt-1 bg-gradient-to-r bg-clip-text text-xl font-medium text-transparent", p.color)}>{p.subtitle}</p>
+            <p className="mt-4 text-muted-foreground md:text-lg">{p.description}</p>
+            <p className="mt-6 font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">What I did</p>
+            <ul className="mt-2 space-y-1.5">
+              {p.highlights.map((h) => (
+                <li key={h} className="flex gap-2.5 text-sm text-foreground/85 md:text-[15px]">
+                  <Check className="mt-0.5 size-4 shrink-0 text-emerald-500" />
+                  <span>{h}</span>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-6 flex flex-wrap gap-2">
               {p.tech.map((t) => (
                 <span key={t} className="rounded-full bg-muted px-3 py-1 font-mono text-xs">
                   {t}
                 </span>
               ))}
             </div>
-            <div className="mt-8 lg:mt-auto lg:pt-8">
+            <div className="mt-6 lg:mt-auto lg:pt-6">
               {p.link ? (
                 <a
                   href={p.link}
@@ -223,14 +233,37 @@ function ProjectCard({
               )}
             </div>
           </div>
-          <div className={cn("relative flex items-center justify-center bg-gradient-to-br p-6 md:p-10", p.color)}>
+          <div className={cn("relative flex flex-col items-center justify-center gap-6 bg-gradient-to-br p-6 md:p-10", p.color)}>
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.25),transparent_50%)]" />
+            <div className="relative w-full max-w-md">
+              <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-white/80">How it works</p>
+              <ol className="flex flex-wrap items-center gap-x-1.5 gap-y-2">
+                {p.pipeline.map((step, si) => (
+                  <motion.li
+                    key={step}
+                    initial={{ opacity: 0, y: 8 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.15 + si * 0.12, duration: 0.35 }}
+                    className="flex items-center gap-1.5"
+                  >
+                    <span className="rounded-full border border-white/30 bg-black/35 px-3 py-1.5 text-xs font-medium text-white backdrop-blur md:text-sm">
+                      {step}
+                    </span>
+                    {si < p.pipeline.length - 1 && <ArrowRight aria-hidden className="size-3.5 text-white/80" />}
+                  </motion.li>
+                ))}
+              </ol>
+            </div>
             <div className="relative w-full max-w-md overflow-hidden rounded-2xl border border-white/20 bg-black/70 shadow-2xl backdrop-blur">
               <div className="flex items-center gap-1.5 border-b border-white/10 px-4 py-3">
                 <span className="size-3 rounded-full bg-red-400" />
                 <span className="size-3 rounded-full bg-yellow-400" />
                 <span className="size-3 rounded-full bg-green-400" />
-                <span className="ml-3 font-mono text-xs text-white/50">{p.title.toLowerCase().replace(/\s+/g, "-")}</span>
+                <span className="ml-3 font-mono text-xs text-white/70">{p.title.toLowerCase().replace(/\s+/g, "-")}</span>
+                <span className="ml-auto rounded-full border border-white/20 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-white/70">
+                  Illustrative flow
+                </span>
               </div>
               <div className="space-y-2 p-5 font-mono text-[13px] leading-relaxed text-white/90">
                 {p.terminal.map((line, li) => (
@@ -373,6 +406,13 @@ export function Contact() {
                 {copied ? <Check className="size-4 text-emerald-500" /> : <Copy className="size-4" />}
                 {copied ? "Copied!" : "Copy email"}
               </button>
+              <a
+                href={`${BP}/Om_Kumar_Bhardwaj_Resume.pdf`}
+                download
+                className="inline-flex items-center gap-2 rounded-full border border-border px-6 py-3.5 font-medium transition hover:bg-muted"
+              >
+                <Download className="size-4" /> Resume (PDF)
+              </a>
             </div>
           </Reveal>
           <Reveal delay={0.4}>

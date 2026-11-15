@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion, useScroll, useTransform } from "motion/react";
-import { ArrowDown, ArrowRight, MapPin, Mail } from "lucide-react";
+import { ArrowDown, ArrowRight, Download, MapPin, Mail } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { DATA } from "@/data/resume";
 import { Icons } from "@/components/icons";
@@ -48,15 +48,19 @@ export function Hero() {
   const scale = useTransform(scrollYProgress, [0, 1], [1, 0.92]);
   const photoY = useTransform(scrollYProgress, [0, 1], [0, -80]);
 
-  const name = `Hi, I'm ${DATA.firstName}.`;
+  // Full searchable name above the fold. Split so it wraps as "Om Kumar / Bhardwaj"
+  // at every width instead of breaking at arbitrary points.
+  const [first, ...rest] = DATA.name.split(" ");
+  const surname = rest.pop() ?? "";
+  const givenNames = [first, ...rest].join(" ");
 
   return (
     <section id="top" ref={ref} className="relative flex min-h-[100svh] items-center overflow-hidden pt-24">
       {/* animated aurora background */}
       <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="aurora absolute -left-40 -top-40 size-[38rem] rounded-full bg-violet-600/30 blur-[120px]" />
-        <div className="aurora-2 absolute -right-40 top-20 size-[34rem] rounded-full bg-cyan-500/20 blur-[120px]" />
-        <div className="aurora-3 absolute bottom-0 left-1/3 size-[30rem] rounded-full bg-fuchsia-600/20 blur-[120px]" />
+        <div className="aurora absolute -left-40 -top-40 size-[30rem] rounded-full md:size-[44rem]" />
+        <div className="aurora-2 absolute -right-40 top-20 size-[26rem] rounded-full md:size-[40rem]" />
+        <div className="aurora-3 absolute bottom-0 left-1/3 hidden size-[36rem] rounded-full md:block" />
         <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(128,128,128,0.07)_1px,transparent_1px),linear-gradient(to_bottom,rgba(128,128,128,0.07)_1px,transparent_1px)] bg-[size:56px_56px] [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]" />
       </div>
 
@@ -75,33 +79,47 @@ export function Hero() {
             Open to AI Engineer roles · 15-day notice
           </motion.div>
 
-          <h1 className="text-5xl font-semibold leading-[1.05] tracking-tight sm:text-6xl md:text-7xl xl:text-8xl">
-            {name.split("").map((c, i) => (
-              <motion.span
-                key={i}
-                className="inline-block"
-                initial={{ opacity: 0, y: 60, rotateX: -60 }}
-                animate={{ opacity: 1, y: 0, rotateX: 0 }}
-                transition={{ duration: 0.7, delay: 0.15 + i * 0.035, ease }}
-              >
-                {c === " " ? " " : c}
-              </motion.span>
-            ))}
+          {/* LCP text: painted at opacity 1 on first frame; entrance is transform-only. */}
+          <motion.p
+            initial={{ y: 16 }}
+            animate={{ y: 0 }}
+            transition={{ duration: 0.6, ease }}
+            className="text-lg font-medium text-muted-foreground sm:text-xl md:text-2xl"
+          >
+            Hi, I&apos;m
+          </motion.p>
+          <h1 className="mt-1 text-[3.25rem] font-semibold leading-[1.02] tracking-tight sm:text-6xl md:text-7xl xl:text-8xl">
+            <motion.span
+              className="block"
+              initial={{ y: 28 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 0.7, delay: 0.05, ease }}
+            >
+              {givenNames}
+            </motion.span>
+            <motion.span
+              className="block bg-gradient-to-r from-foreground via-foreground to-violet-500 bg-clip-text pb-[0.08em] text-transparent dark:to-violet-400"
+              initial={{ y: 28 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 0.7, delay: 0.12, ease }}
+            >
+              {surname}
+            </motion.span>
           </h1>
 
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.7, ease }}
+            transition={{ duration: 0.6, delay: 0.25, ease }}
             className="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl md:text-5xl"
           >
             <RotatingRole />
           </motion.p>
 
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.85, ease }}
+            initial={{ y: 20 }}
+            animate={{ y: 0 }}
+            transition={{ duration: 0.7, delay: 0.2, ease }}
             className="mt-6 max-w-xl text-lg text-muted-foreground md:text-xl"
           >
             {DATA.heroLine}
@@ -110,7 +128,7 @@ export function Hero() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 1, ease }}
+            transition={{ duration: 0.6, delay: 0.35, ease }}
             className="mt-10 flex flex-wrap items-center gap-3"
           >
             <a
@@ -125,14 +143,11 @@ export function Hero() {
               <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
             </a>
             <a
-              href="#projects"
-              onClick={(e) => {
-                e.preventDefault();
-                document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
-              }}
+              href={`${BP}/Om_Kumar_Bhardwaj_Resume.pdf`}
+              download
               className="inline-flex items-center gap-2 rounded-full border border-border px-7 py-3.5 font-medium transition hover:bg-muted"
             >
-              See my work
+              <Download className="size-4" /> Download resume
             </a>
             <div className="ml-1 flex items-center gap-2">
               <a aria-label="LinkedIn" href={DATA.contact.linkedin} target="_blank" rel="noopener noreferrer" className="grid size-12 place-items-center rounded-full border border-border transition hover:bg-muted">
@@ -147,7 +162,7 @@ export function Hero() {
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 1.2 }}
+            transition={{ delay: 0.5 }}
             className="mt-6 flex items-center gap-1.5 text-sm text-muted-foreground"
           >
             <MapPin className="size-4" /> {DATA.location}
@@ -156,9 +171,9 @@ export function Hero() {
 
         <motion.div
           style={{ y: photoY }}
-          initial={{ opacity: 0, scale: 0.85 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, delay: 0.3, ease }}
+          initial={{ scale: 0.9 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 0.9, ease }}
           className="relative mx-auto w-full max-w-[20rem] sm:max-w-sm lg:max-w-md"
         >
           <div className="absolute -inset-[3px] overflow-hidden rounded-[2.2rem] opacity-90">
@@ -167,7 +182,17 @@ export function Hero() {
           <div className="absolute -inset-6 -z-10 rounded-[3rem] bg-violet-600/20 blur-3xl" />
           <div className="relative overflow-hidden rounded-[2rem] bg-background">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={`${BP}/me.jpg`} alt="Om Kumar Bhardwaj" className="aspect-square w-full object-cover" />
+            <picture>
+              <source srcSet={`${BP}/me.webp`} type="image/webp" />
+              <img
+                src={`${BP}/me.jpg`}
+                alt={DATA.name}
+                width={400}
+                height={400}
+                fetchPriority="high"
+                className="aspect-square w-full object-cover"
+              />
+            </picture>
           </div>
           {CHIPS.map((c) => (
             <motion.span

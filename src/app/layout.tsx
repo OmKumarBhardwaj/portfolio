@@ -23,14 +23,15 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(DATA.url),
   title: {
-    default: DATA.name,
+    default: `${DATA.name} — AI Engineer | Java & Python Backend`,
     template: `%s | ${DATA.name}`,
   },
   description: DATA.description,
   openGraph: {
-    title: `${DATA.name}`,
+    title: `${DATA.name} — AI Engineer | Java & Python Backend`,
     description: DATA.description,
     url: DATA.url,
+    images: [{ url: "/og.png", width: 1200, height: 630, alt: `${DATA.name} — AI Engineer` }],
     siteName: `${DATA.name}`,
     locale: "en_US",
     type: "website",
@@ -47,12 +48,10 @@ export const metadata: Metadata = {
     },
   },
   twitter: {
-    title: `${DATA.name}`,
+    title: `${DATA.name} — AI Engineer | Java & Python Backend`,
+    description: DATA.description,
     card: "summary_large_image",
-  },
-  verification: {
-    google: "",
-    yandex: "",
+    images: ["/og.png"],
   },
 };
 

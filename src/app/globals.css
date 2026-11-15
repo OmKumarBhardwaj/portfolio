@@ -246,13 +246,22 @@ section[id] { scroll-margin-top: 5rem; }
 .marquee { animation: marquee 45s linear infinite; }
 .marquee-reverse { animation: marquee 45s linear infinite reverse; }
 
-@keyframes aurora { 0%,100% { transform: translate(0,0) scale(1); } 33% { transform: translate(60px,-40px) scale(1.1); } 66% { transform: translate(-40px,40px) scale(0.95); } }
-.aurora { animation: aurora 18s ease-in-out infinite; }
-.aurora-2 { animation: aurora 22s ease-in-out infinite reverse; }
-.aurora-3 { animation: aurora 26s ease-in-out infinite; }
+/* Aurora blobs: soft radial gradients instead of filter: blur(120px).
+   Same glow, but no per-frame blur rasterisation. Animated only on md+;
+   static on phones to keep the main thread and GPU free during load. */
+.aurora, .aurora-2, .aurora-3 { will-change: transform; }
+.aurora   { background: radial-gradient(closest-side, rgb(124 58 237 / 0.38), rgb(124 58 237 / 0.14) 55%, transparent); }
+.aurora-2 { background: radial-gradient(closest-side, rgb(6 182 212 / 0.28), rgb(6 182 212 / 0.10) 55%, transparent); }
+.aurora-3 { background: radial-gradient(closest-side, rgb(192 38 211 / 0.28), rgb(192 38 211 / 0.10) 55%, transparent); }
+@keyframes aurora { 0%,100% { transform: translate3d(0,0,0) scale(1); } 33% { transform: translate3d(60px,-40px,0) scale(1.1); } 66% { transform: translate3d(-40px,40px,0) scale(0.95); } }
+@media (min-width: 768px) {
+  .aurora { animation: aurora 18s ease-in-out infinite; }
+  .aurora-2 { animation: aurora 22s ease-in-out infinite reverse; }
+  .aurora-3 { animation: aurora 26s ease-in-out infinite; }
+}
 
 @keyframes spin-slow { to { transform: rotate(360deg); } }
-.spin-slow { animation: spin-slow 8s linear infinite; }
+.spin-slow { animation: spin-slow 8s linear infinite; will-change: transform; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

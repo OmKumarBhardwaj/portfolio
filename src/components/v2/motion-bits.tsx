@@ -1,6 +1,6 @@
 "use client";
 
-import { animate, motion, useInView, useMotionValue, useScroll, useTransform, type MotionValue } from "motion/react";
+import { animate, motion, useInView, useReducedMotion, useScroll, useTransform, type MotionValue } from "motion/react";
 import { useEffect, useRef, useState, type ReactNode, type MouseEvent } from "react";
 import { cn } from "@/lib/utils";
 
@@ -21,8 +21,8 @@ export function Reveal({
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0, y, x, filter: "blur(8px)" }}
-      whileInView={{ opacity: 1, y: 0, x: 0, filter: "blur(0px)" }}
+      initial={{ opacity: 0, y, x }}
+      whileInView={{ opacity: 1, y: 0, x: 0 }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{ duration: 0.8, delay, ease: [0.22, 1, 0.36, 1] }}
     >
@@ -31,12 +31,18 @@ export function Reveal({
   );
 }
 
-/** Section heading with small eyebrow label. */
+const EYEBROW = "mb-3 font-mono text-sm uppercase tracking-[0.3em] text-violet-600 dark:text-violet-400 md:text-base";
+
+/** Section label. It is the section's h2 unless a big title is given (then the title is the h2). */
 export function SectionHeading({ eyebrow, title, className }: { eyebrow: string; title?: ReactNode; className?: string }) {
   return (
     <div className={cn("mb-12 md:mb-16", className)}>
       <Reveal>
-        <p className="mb-3 font-mono text-sm uppercase tracking-[0.3em] text-violet-500 dark:text-violet-400 md:text-base">{eyebrow}</p>
+        {title ? (
+          <p className={EYEBROW}>{eyebrow}</p>
+        ) : (
+          <h2 className={EYEBROW}>{eyebrow}</h2>
+        )}
       </Reveal>
       {title && (
         <Reveal delay={0.1}>
@@ -64,7 +70,8 @@ export function ScrollLitText({ text, className }: { text: string; className?: s
 }
 
 function Word({ children, progress, range }: { children: string; progress: MotionValue<number>; range: [number, number] }) {
-  const opacity = useTransform(progress, range, [0.15, 1]);
+  // 0.45 floor keeps unlit words readable (WCAG 3:1 for large text) while the lit effect still shows.
+  const opacity = useTransform(progress, range, [0.45, 1]);
   return (
     <motion.span style={{ opacity }} className="mr-[0.25em] mt-[0.1em]">
       {children}
@@ -72,21 +79,40 @@ function Word({ children, progress, range }: { children: string; progress: Motio
   );
 }
 
-/** Number that counts up when it scrolls into view. */
+/**
+ * Number that counts up when it scrolls into view.
+ * The static HTML holds the FINAL value (crawlers, link previews, no-JS and slow phones never see "0").
+ * Only elements still below the fold at mount are reset to 0 and then animated when they appear.
+ */
 export function CountUp({ to, decimals = 0, suffix = "" }: { to: number; decimals?: number; suffix?: string }) {
   const ref = useRef<HTMLSpanElement>(null);
+  const reduce = useReducedMotion();
   const inView = useInView(ref, { once: true, margin: "-40px" });
-  const mv = useMotionValue(0);
-  const [display, setDisplay] = useState((0).toFixed(decimals));
+  const armed = useRef(false);
+  const [display, setDisplay] = useState(to.toFixed(decimals));
+
   useEffect(() => {
-    if (!inView) return;
-    const controls = animate(mv, to, { duration: 1.8, ease: [0.22, 1, 0.36, 1] });
-    const unsub = mv.on("change", (v) => setDisplay(v.toFixed(decimals)));
-    return () => {
-      controls.stop();
-      unsub();
-    };
-  }, [inView, mv, to, decimals]);
+    const el = ref.current;
+    if (!el || reduce) return;
+    const r = el.getBoundingClientRect();
+    const visible = r.top < window.innerHeight && r.bottom > 0;
+    if (!visible) {
+      armed.current = true;
+      setDisplay((0).toFixed(decimals));
+    }
+  }, [reduce, decimals]);
+
+  useEffect(() => {
+    if (!inView || !armed.current) return;
+    armed.current = false;
+    const controls = animate(0, to, {
+      duration: 1.8,
+      ease: [0.22, 1, 0.36, 1],
+      onUpdate: (v) => setDisplay(v.toFixed(decimals)),
+    });
+    return () => controls.stop();
+  }, [inView, to, decimals]);
+
   return (
     <span ref={ref}>
       {display}

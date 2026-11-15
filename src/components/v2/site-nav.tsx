@@ -1,7 +1,9 @@
 "use client";
 
 import { AnimatePresence, motion, useScroll, useSpring } from "motion/react";
-import { Menu, Moon, Sun, X } from "lucide-react";
+import { Download, Menu, Moon, Sun, X } from "lucide-react";
+
+const BP = process.env.NEXT_PUBLIC_BASE_PATH || "";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
@@ -104,6 +106,13 @@ export function SiteNav() {
         </ul>
 
         <div className="flex items-center gap-2">
+          <a
+            href={`${BP}/Om_Kumar_Bhardwaj_Resume.pdf`}
+            download
+            className="hidden items-center gap-1.5 rounded-full bg-foreground px-4 py-2 text-sm font-medium text-background transition hover:opacity-90 sm:inline-flex"
+          >
+            <Download className="size-4" /> Resume
+          </a>
           <ThemeToggle />
           <button
             aria-label="Open menu"
