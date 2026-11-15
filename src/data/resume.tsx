@@ -1,4 +1,5 @@
 import { Icons } from "@/components/icons";
+const BP = process.env.NEXT_PUBLIC_BASE_PATH || "";
 import { HomeIcon } from "lucide-react";
 import { Python } from "@/components/ui/svgs/python";
 import { Postgresql } from "@/components/ui/svgs/postgresql";
@@ -16,7 +17,7 @@ export const DATA = {
     "Senior Software Engineer building production AI agents and Java backend systems for supply-chain logistics.",
   summary:
     "I build **AI agents that real teams use every day** and the **Java / Spring Boot backends** behind them. At [4flow](#work) I led three production LLM agents on AWS: **Luca** (text-to-SQL), **Polaris** (email triage) and **Radiance** (supply-chain risk alerts), built with LangGraph, LangChain and Amazon Bedrock AgentCore, and shipped with Langfuse tracing, evaluations and guardrails. Before that, I led a small team at a travel-tech startup and shipped an LLM trip-planning feature. I care about agents that are **observable, safe and boring to operate**. Open to **AI Engineer / GenAI Engineer** roles and senior backend roles with AI work.",
-  avatarUrl: "/me.jpg",
+  avatarUrl: `${BP}/me.jpg`,
   stats: [
     { value: "3", label: "production AI agents" },
     { value: "2.5+", label: "years shipping backends" },
@@ -68,7 +69,7 @@ export const DATA = {
       badges: ["AI Agents", "Backend"],
       location: "Bengaluru, India",
       title: "Senior Software Engineer",
-      logoUrl: "/logos/4flow.svg",
+      logoUrl: `${BP}/logos/4flow.svg`,
       start: "Jul 2025",
       end: "Present",
       description:
@@ -80,7 +81,7 @@ export const DATA = {
       badges: ["Startup"],
       location: "India",
       title: "Software Engineer",
-      logoUrl: "/logos/getsetyo.svg",
+      logoUrl: `${BP}/logos/getsetyo.svg`,
       start: "May 2024",
       end: "Jun 2025",
       description:
@@ -92,7 +93,7 @@ export const DATA = {
       badges: ["Internship"],
       location: "India",
       title: "Java Developer Intern",
-      logoUrl: "/logos/wipro.svg",
+      logoUrl: `${BP}/logos/wipro.svg`,
       start: "May 2023",
       end: "Sep 2023",
       description:
@@ -104,7 +105,7 @@ export const DATA = {
       badges: ["Internship"],
       location: "India",
       title: "Software Developer Intern",
-      logoUrl: "/logos/whizzo.svg",
+      logoUrl: `${BP}/logos/whizzo.svg`,
       start: "Jan 2023",
       end: "Feb 2023",
       description:
@@ -116,7 +117,7 @@ export const DATA = {
       school: "Haldia Institute of Technology",
       href: "https://hithaldia.ac.in",
       degree: "B.Tech, Computer Science · CGPA 8.9",
-      logoUrl: "/logos/hit.svg",
+      logoUrl: `${BP}/logos/hit.svg`,
       start: "2020",
       end: "2024",
     },
@@ -131,7 +132,7 @@ export const DATA = {
         "Business users ask questions in plain English; Luca writes safe, validated SQL against the logistics warehouse and explains the answer. Turned a 1-day analyst request into an answer in under a minute.",
       technologies: ["LangGraph", "Amazon Bedrock", "Python", "PostgreSQL", "Langfuse", "Guardrails"],
       links: [],
-      image: "/projects/luca.svg",
+      image: `${BP}/projects/luca.svg`,
       video: "",
     },
     {
@@ -143,7 +144,7 @@ export const DATA = {
         "Reads every inbound operations email, classifies intent, extracts the key fields and opens a tagged ticket automatically. Saves the team 10+ hours of manual triage every week.",
       technologies: ["LLM", "LangGraph", "Amazon Bedrock", "Tool Calling", "Java", "Spring Boot"],
       links: [],
-      image: "/projects/polaris.svg",
+      image: `${BP}/projects/polaris.svg`,
       video: "",
     },
     {
@@ -155,7 +156,7 @@ export const DATA = {
         "Scans 20+ news sources daily, detects events that can disrupt supply chains (strikes, port closures, weather) and sends ranked alerts to planning teams.",
       technologies: ["AI Agents", "LangChain", "Amazon Bedrock", "Python", "Scheduling"],
       links: [],
-      image: "/projects/radiance.svg",
+      image: `${BP}/projects/radiance.svg`,
       video: "",
     },
     {
@@ -169,7 +170,7 @@ export const DATA = {
       links: [
         { type: "Source", href: "https://github.com/OmKumarBhardwaj/raw-agent", icon: <Icons.github className="size-3" /> },
       ],
-      image: "/projects/raw-agent.svg",
+      image: `${BP}/projects/raw-agent.svg`,
       video: "",
     },
     {
@@ -183,7 +184,7 @@ export const DATA = {
       links: [
         { type: "Source", href: "https://github.com/OmKumarBhardwaj/CuisineConnect", icon: <Icons.github className="size-3" /> },
       ],
-      image: "/projects/cuisine.svg",
+      image: `${BP}/projects/cuisine.svg`,
       video: "",
     },
   ],

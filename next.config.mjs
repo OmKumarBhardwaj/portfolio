@@ -6,6 +6,7 @@ const nextConfig = {
   output: "export",
   images: { unoptimized: true },
   trailingSlash: true,
+  basePath: process.env.BASE_PATH || "",
 };
 
 // withContentCollections must be the outermost plugin
