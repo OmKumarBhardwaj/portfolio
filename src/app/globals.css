@@ -78,11 +78,11 @@
 }
 
 .dark {
-  --background: oklch(0.18 0 0);
+  --background: oklch(0.13 0.008 280);
   --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
+  --card: oklch(0.17 0.01 280);
   --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
+  --popover: oklch(0.17 0.01 280);
   --popover-foreground: oklch(0.985 0 0);
   --primary: oklch(0.922 0 0);
   --primary-foreground: oklch(0.205 0 0);
@@ -233,4 +233,28 @@
     @apply border-b-0;
   }
 
+}
+/* ---- portfolio v2 ---- */
+html { scroll-behavior: smooth; }
+section[id] { scroll-margin-top: 5rem; }
+.container-x { width: 100%; max-width: 80rem; margin-inline: auto; padding-inline: 1.5rem; }
+@media (min-width: 768px) { .container-x { padding-inline: 2.5rem; } }
+.section { padding-block: 6rem; }
+@media (min-width: 768px) { .section { padding-block: 9rem; } }
+
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-100%); } }
+.marquee { animation: marquee 45s linear infinite; }
+.marquee-reverse { animation: marquee 45s linear infinite reverse; }
+
+@keyframes aurora { 0%,100% { transform: translate(0,0) scale(1); } 33% { transform: translate(60px,-40px) scale(1.1); } 66% { transform: translate(-40px,40px) scale(0.95); } }
+.aurora { animation: aurora 18s ease-in-out infinite; }
+.aurora-2 { animation: aurora 22s ease-in-out infinite reverse; }
+.aurora-3 { animation: aurora 26s ease-in-out infinite; }
+
+@keyframes spin-slow { to { transform: rotate(360deg); } }
+.spin-slow { animation: spin-slow 8s linear infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .marquee, .marquee-reverse, .aurora, .aurora-2, .aurora-3, .spin-slow { animation: none; }
 }
